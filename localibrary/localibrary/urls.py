@@ -23,7 +23,7 @@ urlpatterns = [
 from django.urls import include
 from accounts import views as user_views
 urlpatterns +=[
-	path('catalog/',include('catalog.urls')),
+	path('catalog/',include('catalog.urls'),name='home'),
     path('accounts/',user_views.signup),
 	
 ]
