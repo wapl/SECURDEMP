@@ -21,11 +21,17 @@ urlpatterns = [
 ]
 
 from django.urls import include
+from django.contrib.auth import views as auth_views
 from accounts import views as user_views
+
 urlpatterns +=[
 	path('catalog/',include('catalog.urls'),name='home'),
-    path('accounts/',user_views.signup),
-	
+    path('accounts/',user_views.signup,name='register'),
+    path('profile/', user_views.profile, name='profile'),
+    path('login/',user_views.custom_login_view, name='login'),
+    path("lockout/",user_views.Lockout,name="lockout"),
+    path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
+
 ]
 
 from django.views.generic import RedirectView
