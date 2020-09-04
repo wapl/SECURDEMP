@@ -11,8 +11,15 @@
 </form>
 </div>
 {%for book in book_list%}
-<hi>{{book.title}}</hi>
-<p>by {{book.author}}</p>
+<article class="media content-section">
+          <div class="media-body">
+            <div class="book-metadata">
+              <a class="mr-2" href="#">{{ book.author }}</a>
+            </div>
+            <h2><a class="book-title" href="#">{{ book.title }}</a></h2>
+          </div>
+        </article>
+
 {%endfor%}
 
 {% endblock content %}

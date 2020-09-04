@@ -1,5 +1,13 @@
-<h1>Search Results</h1>
+{% extends "catalog/base.html" %}
+{% block content %}
 {%for book in book_list%}
-<hi>{{book.title}}</hi>
-<p>by {{book.author}}</p>
+<article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ book.author }}</a>
+            </div>
+            <h2><a class="article-title" href="#">{{ book.title }}</a></h2>
+          </div>
+        </article>
 {% endfor %}
+{% endblock content %}
