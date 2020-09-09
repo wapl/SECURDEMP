@@ -38,9 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'catalog',
+    'accounts',
     'axes',
-	'catalog',
-    'accounts'
+    
+	
 ]
 AUTHENTICATION_BACKENDS = [
     # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
@@ -78,7 +80,9 @@ TEMPLATES = [
         },
     },
 ]
-
+TEMPLATE_CONTEXT_PROCESSORS=[
+    'django.core.context_processors.request',
+] 
 WSGI_APPLICATION = 'localibrary.wsgi.application'
 
 
@@ -128,9 +132,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+#AUTH_PROFILE_MODULE = 'accounts.Profile'
 STATIC_URL = '/static/'
-
+##SESSION_COOKIE_AGE=30
+##SESSION_EXPIRE_AT_BROWSER_CLOSE=False
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'index'
 AXES_FAILURE_LIMIT=5

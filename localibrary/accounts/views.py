@@ -6,10 +6,7 @@ from django.contrib.auth import views as auth_views
 from accounts.forms import SignUpForm,UserLoginForm
 from django.contrib import messages
 from django.conf import settings
-import axes.attempts as attempt
-import axes.handlers.database as handler
-import axes.handlers.proxy as proxy
-import axes.attempts as attempt
+
 def signup(request):
     form = SignUpForm(request.POST)
     if request.method == 'POST':
@@ -20,7 +17,7 @@ def signup(request):
             user.save()
             username=form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
+            user = authenticate(request,username=username, password=password)
             login(request, user)
             return redirect('index')
    
