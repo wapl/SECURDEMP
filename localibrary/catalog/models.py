@@ -1,5 +1,9 @@
 from django.db import models
-
+from accounts.models import Profile
+from django.contrib.auth.models import User
+import uuid
+from django.contrib import messages
+from django.urls import reverse
 # Create your models here.
 
 class Genre(models.Model):
@@ -8,27 +12,32 @@ class Genre(models.Model):
         return self.name
 
 class Book(models.Model):
+    
     title=models.CharField(max_length=200)
     author=models.ForeignKey('Author',on_delete=models.SET_NULL,null=True)
     summary=models.TextField(max_length=1000,help_text="Enter a brief desciption of Book")
-    isbn=models.CharField('ISBN',max_length=13,help_text="13 Character ISBN Number")
+    isbn=models.CharField("ISBN",max_length=13,help_text="13 Character ISBN Number")
     genre=models.ManyToManyField(Genre,help_text="Select a genre for this book!")
     def __str__(self):
         return self.title
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'pk': self.pk})
 class Reviews(models.Model):
-    book=models.ForeignKey('Book',on_delete=models.SET_NULL,null=True)
+    book=models.ForeignKey("Book",on_delete=models.PROTECT,db_constraint=False,null=True)
+    Reviewuser=models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     review=models.CharField(max_length=200)
     
-import uuid
+
 class BookInstance(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,help_text="Unique ID")
-    book=models.ForeignKey('Book',on_delete=models.SET_NULL,null=True)
+    book=models.ForeignKey("Book",on_delete=models.PROTECT,db_constraint=False,null=True)
     imprint=models.CharField(max_length=200)
     due_back=models.DateField(null=True,blank=True)
     LOAN_STATUS =(
         ('a','Available'),
         ('r','Reserved'),
     )
+    BookUser=models.ForeignKey(User,on_delete=models.SET_NULL,blank=True,null=True)
     Languages=(
         ('ab', 'Abkhaz'),
         ('aa', 'Afar'),
@@ -235,7 +244,8 @@ class BookInstance(models.Model):
         ordering=['due_back']
 
     def __str__(self):
-        return f'{self.id}({self.book.title})'
+         return f'{self.id}({self.book.title})'
+
 class Author(models.Model):
     first_name=models.CharField(max_length=100)
     last_name=models.CharField(max_length=100)

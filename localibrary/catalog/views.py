@@ -1,13 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Q
-# Create your views here.
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.base import ContextMixin
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Book
-
+from .models import Book,BookInstance,Reviews
+from django.views import View
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
+from django.contrib.auth.models import User
 def index(request):
     book_list=Book.objects.order_by('-title')
     
     context={'book_list':book_list}
+    
     return render(request,'catalog/index.html',context)
 
 def SearchView(request):
@@ -18,4 +30,45 @@ def SearchView(request):
         object_list=model.objects.filter(Q(title__icontains=query))
         context={'book_list':object_list}
         return render(request,temlplate_name,context)
-        
+class BookDetailView(DetailView):
+    model = Book
+
+class ReviewCreateView(LoginRequiredMixin,CreateView):
+    model = Reviews
+    fields=['review']
+    success_url="/catalog/"
+    def get_context_data(self, **kwargs):
+        ctx = super(ReviewCreateView, self).get_context_data(**kwargs)
+        ctx['Book'] = Book.objects.get(id=self.kwargs['pk'])
+
+        return ctx
+    def form_valid(self, form):
+        ctx=self.get_context_data()
+        form.instance.book=ctx['Book']
+        form.instance.Reviewuser = self.request.user
+        return super().form_valid(form)
+
+def ReserveBook(request,pk):
+    Instance=BookInstance.objects.get(id=pk)
+   
+    if request.user.is_authenticated==True:
+        if Instance.status=='a':
+            Instance.status='r'
+            Instance.BookUser=request.user
+            Instance.save()
+        else:
+            messages.error(request, 'BOOK ALREADY RESERRVED')
+        return redirect('/catalog/')
+    else:
+        messages.error(request, 'NEED TO BE LOGIN TO RESERVE BOOK')
+        return redirect('login')
+"""class ReserveBook(ContextMixin,View):
+    model=BookInstance
+    def get_context_data(self, **kwargs):
+        ctx = super(ReserveBook,self).get_context_data(**kwargs)
+        ctx['BookInstance']=BookInstance.objects.get(pk)
+        return ctx
+    def get(self, request, *args, **kwargs):
+        ctx=self.get_context_data()
+        ctx['BookInstance'].status="a"
+        return redirect('/catalog/')"""
