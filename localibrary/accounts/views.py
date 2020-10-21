@@ -3,10 +3,15 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import views as auth_views
+from django.contrib.auth import forms as auth_forms
 from accounts.forms import SignUpForm,UserLoginForm
 from django.contrib import messages
 from django.conf import settings
-
+from django.urls import reverse_lazy
+from catalog.models import Reviews,BookInstance,UserHistory
+class PasswordChangeView(auth_views.PasswordChangeView):
+    form_class=auth_forms.PasswordChangeForm
+    success_url=reverse_lazy('profile')
 def signup(request):
     form = SignUpForm(request.POST)
     if request.method == 'POST':
@@ -24,7 +29,10 @@ def signup(request):
     return render(request, 'accounts/sign_up.html', {'form': form})
 @login_required
 def profile(request):
-    return render(request, 'accounts/profile.html')
+    Logged_in_user_reviews = Reviews.objects.filter(Reviewuser=request.user)
+    Logged_in_user_borrowed=BookInstance.objects.filter(BookUser=request.user)
+    Past_borrowed_books=UserHistory.objects.filter(BookUser=request.user)
+    return render(request, 'accounts/profile.html',{'user_reviews': Logged_in_user_reviews,'User_books':Logged_in_user_borrowed,"User_history":Past_borrowed_books})
 def custom_login_view(request):
     form=UserLoginForm(request.POST)
     if request.method=='POST':

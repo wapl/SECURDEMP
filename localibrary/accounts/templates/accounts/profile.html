@@ -1,12 +1,46 @@
 {% extends "catalog/base.html" %}
-{% block content%}
+{% block content %}
 <div class="content-section">
       <div class="media">
         <div class="media-body">
           <h2 class="account-heading">{{ user.username }}</h2>
+            <h4>Reviews</h4>
+            {% for review in user_reviews %}
+            <hr>
+            <p><strong>Book:</strong> {{ review.book }}</p>
+            <p> {{ review.review }}</p>
+            <p class="text-muted"><strong>By</strong> {{ review.Reviewuser }}</p>
 
-        </div>
+    {% endfor %}
+    <small class="text-muted">
+              <a class="ml-2" href="{% url 'change' %}">Change Password</a>
+            </small>
+    <div style="margin-left:20px;margin-top:20px">
+      {% if User_books  %}
+        <h4>Currently Borrowed Books </h4>
+      {% endif %}
+      {% for copy in User_books%}
+        <h3>{{copy.book.title}} </h3>
+        <hr>
+        {% if copy.status != 'a' %}
+          <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
+        {% endif %}
+        <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
+        <p><strong>Languange:</strong> {{ copy.Lang }}</p>
+        
+      {% endfor %}
+      {% if User_books  %}
+        <h4>Past Borrowed Books </h4>
+      {% endif %}
+      {% for copy in User_history%}
+        <hr>
+        <h3>{{copy.bookInstance.book.title}} </h3>
+        <p><strong>Imprint:</strong> {{ copy.bookInstance.imprint }}</p>
+        <p><strong>Languange:</strong> {{ copy.bookInstance.Lang }}</p>
+        
+      {% endfor %}
       </div>
-      <!-- FORM HERE -->
     </div>
+      
+</div>
 {% endblock %}

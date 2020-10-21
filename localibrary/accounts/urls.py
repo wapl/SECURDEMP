@@ -7,4 +7,5 @@ urlpatterns=[
     path('login/',views.custom_login_view, name='login'),
     path("lockout/",views.Lockout,name="lockout"),
     path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
+    path("change_password/",views.PasswordChangeView.as_view(template_name='accounts/change-password.html'),name='change')
 ]

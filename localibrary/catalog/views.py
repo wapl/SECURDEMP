@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import ContextMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Book,BookInstance,Reviews
+from .models import Book,BookInstance,Reviews,UserHistory
 from django.views import View
 from django.views.generic import (
     ListView,
@@ -50,12 +50,14 @@ class ReviewCreateView(LoginRequiredMixin,CreateView):
 
 def ReserveBook(request,pk):
     Instance=BookInstance.objects.get(id=pk)
-   
+    
     if request.user.is_authenticated==True:
         if Instance.status=='a':
             Instance.status='r'
             Instance.BookUser=request.user
             Instance.save()
+            Trans=UserHistory(bookInstance=Instance,BookUser=request.user)
+            Trans.save()
         else:
             messages.error(request, 'BOOK ALREADY RESERRVED')
         return redirect('/catalog/')

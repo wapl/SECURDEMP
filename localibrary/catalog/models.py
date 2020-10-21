@@ -4,10 +4,12 @@ from django.contrib.auth.models import User
 import uuid
 from django.contrib import messages
 from django.urls import reverse
+from field_history.tracker import FieldHistoryTracker 
 # Create your models here.
 
 class Genre(models.Model):
     name=models.CharField(max_length=200,help_text="Enter a Genra(e.g Detective)")
+    #History = FieldHistoryTracker(['name'])
     def __str__(self):
         return self.name
 
@@ -30,7 +32,7 @@ class Reviews(models.Model):
 
 class BookInstance(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4,help_text="Unique ID")
-    book=models.ForeignKey("Book",on_delete=models.PROTECT,db_constraint=False,null=True)
+    book=models.ForeignKey("Book",on_delete=models.PROTECT,db_constraint=True,null=True)
     imprint=models.CharField(max_length=200)
     due_back=models.DateField(null=True,blank=True)
     LOAN_STATUS =(
@@ -240,6 +242,7 @@ class BookInstance(models.Model):
         help_text='Languages',
 
     )
+    
     class Meta:
         ordering=['due_back']
 
@@ -255,3 +258,6 @@ class Author(models.Model):
         ordering=['last_name','first_name']
     def __str__(self):
         return f'{self.last_name}{self.first_name}'
+class UserHistory(models.Model):
+    bookInstance=models.ForeignKey("BookInstance",on_delete=models.PROTECT,db_constraint=True,null=True)
+    BookUser=models.ForeignKey(User,on_delete=models.SET_NULL,blank=True,null=True)

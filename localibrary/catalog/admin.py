@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Genre,BookInstance ,Book,Reviews
+from .models import Author, Genre,BookInstance ,Book,Reviews,UserHistory
 
 
 
@@ -8,12 +8,13 @@ from .models import Author, Genre,BookInstance ,Book,Reviews
 #admin.site.register(Book)
 
 admin.site.register(Reviews)
-
+"""
 class BookInstanceInLine(admin.TabularInline):
     model=BookInstance 
 class BookAdmin(admin.ModelAdmin):
     list_display=("book","title","author")
     inlines=[BookInstanceInLine]
+"""
 admin.site.register(Book)
 class BookInLine(admin.TabularInline):
     model=Book
@@ -23,6 +24,7 @@ class AuthorAdmin(admin.ModelAdmin):
     inlines=[BookInLine]
 admin.site.register(Author,AuthorAdmin)
 admin.site.register(BookInstance)
+admin.site.register(UserHistory)
 """class BookInstanceAdmin(admin.ModelAdmin):
     list_display=("book","imprint","Lang","status","due_back","id")
     fieldsets=(
