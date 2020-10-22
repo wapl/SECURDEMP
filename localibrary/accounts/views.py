@@ -16,7 +16,7 @@ def signup(request):
             user.refresh_from_db()
             user.profile.id_number=form.cleaned_data.get('id_number')
             user.save()
-            user_group=Group.objects('Student/Teacher')
+            user_group=Group.objects.get(name='Student/Teacher') 
             user.groups.add(user_group)
             username=form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
