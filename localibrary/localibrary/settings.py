@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'catalog',
     'accounts',
     'axes',
-    
+    'django_admin_logs',
 	
 ]
 AUTHENTICATION_BACKENDS = [

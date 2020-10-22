@@ -55,6 +55,7 @@ class ReviewCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
         return super().form_valid(form)
     def test_func(self):
         return self.request.user.groups.fitler(name='Student/Teacher').exists() 
+@user_passes_test(in_student, login_url='login')
 def ReserveBook(request,pk):
     Instance=BookInstance.objects.get(id=pk)
    
