@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic.base import ContextMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.http import HttpResponse
 from .models import Book,BookInstance,Reviews
 from django.views import View
@@ -15,13 +15,19 @@ from django.views.generic import (
     DeleteView
 )
 from django.contrib.auth.models import User
+
+def not_in_admin(user):
+    return not user.groups.filter(name='Admin').exists() and not user.groups.filter(name='Book Manager').exists()
+def in_student(user):
+    return  user.groups.filter(name='Student/Teacher').exists() 
+@user_passes_test(not_in_admin, login_url='login')
 def index(request):
     book_list=Book.objects.order_by('-title')
     
     context={'book_list':book_list}
     
     return render(request,'catalog/index.html',context)
-
+@user_passes_test(not_in_admin, login_url='login')
 def SearchView(request):
     model=Book
     if request.method=="POST":
@@ -33,7 +39,7 @@ def SearchView(request):
 class BookDetailView(DetailView):
     model = Book
 
-class ReviewCreateView(LoginRequiredMixin,CreateView):
+class ReviewCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Reviews
     fields=['review']
     success_url="/catalog/"
@@ -47,7 +53,8 @@ class ReviewCreateView(LoginRequiredMixin,CreateView):
         form.instance.book=ctx['Book']
         form.instance.Reviewuser = self.request.user
         return super().form_valid(form)
-
+    def test_func(self):
+        return self.request.user.groups.fitler(name='Student/Teacher').exists() 
 def ReserveBook(request,pk):
     Instance=BookInstance.objects.get(id=pk)
    
