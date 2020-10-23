@@ -135,7 +135,11 @@ USE_TZ = True
 #AUTH_PROFILE_MODULE = 'accounts.Profile'
 STATIC_URL = '/static/'
 SESSION_COOKIE_AGE=300
+<<<<<<< Updated upstream
 SESSION_SAVE_EVERY_REQUEST=True
+=======
+SESSION_SAVE_EVERY_REQUEST=30
+>>>>>>> Stashed changes
 ##SESSION_EXPIRE_AT_BROWSER_CLOSE=False
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'index'

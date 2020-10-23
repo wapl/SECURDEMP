@@ -16,8 +16,13 @@ def signup(request):
             user.refresh_from_db()
             user.profile.id_number=form.cleaned_data.get('id_number')
             user.save()
+<<<<<<< Updated upstream
             user_group=Group.objects.get(name='Student/Teacher') 
             user.groups.add(user_group)
+=======
+            user_groups=Group.objects.get(name='Student/Teacher') 
+            user.groups.add(user_groups)
+>>>>>>> Stashed changes
             username=form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(request,username=username, password=password)

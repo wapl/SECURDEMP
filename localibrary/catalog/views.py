@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+<<<<<<< Updated upstream
+=======
+from django.contrib.auth.decorators import user_passes_test
+>>>>>>> Stashed changes
 from django.views.generic.base import ContextMixin
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.http import HttpResponse
@@ -17,9 +21,15 @@ from django.views.generic import (
 from django.contrib.auth.models import User
 
 def not_in_admin(user):
+<<<<<<< Updated upstream
     return not user.groups.filter(name='Admin').exists() and not user.groups.filter(name='Book Manager').exists()
 def in_student(user):
     return  user.groups.filter(name='Student/Teacher').exists() 
+=======
+    return  not user.groups.filter(name='Admin').exists() and  not user.groups.filter(name='Book Manager').exists()
+def in_student(user):
+    return   user.groups.filter(name='Student/Teacher').exists() 
+>>>>>>> Stashed changes
 @user_passes_test(not_in_admin, login_url='login')
 def index(request):
     book_list=Book.objects.order_by('-title')
@@ -27,6 +37,10 @@ def index(request):
     context={'book_list':book_list}
     
     return render(request,'catalog/index.html',context)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 @user_passes_test(not_in_admin, login_url='login')
 def SearchView(request):
     model=Book
@@ -39,6 +53,10 @@ def SearchView(request):
 class BookDetailView(DetailView):
     model = Book
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 class ReviewCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
     model = Reviews
     fields=['review']
@@ -54,7 +72,11 @@ class ReviewCreateView(LoginRequiredMixin,UserPassesTestMixin,CreateView):
         form.instance.Reviewuser = self.request.user
         return super().form_valid(form)
     def test_func(self):
+<<<<<<< Updated upstream
         return self.request.user.groups.fitler(name='Student/Teacher').exists() 
+=======
+        return self.request.user.groups.filter(name='Student/Teacher').exists()
+>>>>>>> Stashed changes
 @user_passes_test(in_student, login_url='login')
 def ReserveBook(request,pk):
     Instance=BookInstance.objects.get(id=pk)

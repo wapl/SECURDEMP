@@ -28,6 +28,7 @@ urlpatterns +=[
     path('accounts/',include('accounts.urls')),
     path('catalog/',include('catalog.urls'),name='home'),
     
+    
 ]
 from django.views.generic import RedirectView
 
