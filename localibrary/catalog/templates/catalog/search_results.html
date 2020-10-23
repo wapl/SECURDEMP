@@ -4,9 +4,9 @@
 <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ book.author }}</a>
+              <p>{{ book.author }}</p>
             </div>
-            <h2><a class="article-title" href="#">{{ book.title }}</a></h2>
+            <h2><a class="article-title" href="{% url 'detail'  book.id %}">{{ book.title }}</a></h2>
           </div>
         </article>
 {% endfor %}

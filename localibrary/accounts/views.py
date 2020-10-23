@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import views as auth_views
@@ -15,6 +16,8 @@ def signup(request):
             user.refresh_from_db()
             user.profile.id_number=form.cleaned_data.get('id_number')
             user.save()
+            user_group=Group.objects.get(name='Student/Teacher') 
+            user.groups.add(user_group)
             username=form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(request,username=username, password=password)

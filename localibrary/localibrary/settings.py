@@ -25,7 +25,7 @@ SECRET_KEY = '24zcdogu4u-n4igyp4o-!0(@(^0rnsz650xl#3cnds^5+!r03m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'catalog',
     'accounts',
     'axes',
-    
+    'django_admin_logs',
 	
 ]
 AUTHENTICATION_BACKENDS = [
@@ -134,7 +134,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 #AUTH_PROFILE_MODULE = 'accounts.Profile'
 STATIC_URL = '/static/'
-##SESSION_COOKIE_AGE=30
+SESSION_COOKIE_AGE=300
+SESSION_SAVE_EVERY_REQUEST=True
 ##SESSION_EXPIRE_AT_BROWSER_CLOSE=False
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'index'
